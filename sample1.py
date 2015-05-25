@@ -1,7 +1,18 @@
-__author__ = 'ROHIT'
+__author__ = 'TESR-PVPK'
+
+# B - Black Piece
+# W - White Piece
+# Z - Colour given to the blank places
+# R - Rook pieces in the board
+# N - Knight pieces in the board
+# B - Bishop pieces in the board
+# K - King pieces in the board
+# Q - Queen pieces in the board
+# P - Pawn pieces in the board
+# bk - Blank Places in the board
 
 
-class Piece(object):
+class Piece(object):  # Abstract Class for every piece
     def move(self):
         pass
 
@@ -132,6 +143,7 @@ class Game(object):
 def main():
     g = Game()
 
+
 if __name__ == '__main__':
-        main()
+    main()
 
