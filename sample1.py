@@ -13,7 +13,7 @@ __author__ = 'TESR-PVPK'
 
 
 class Piece(object):  # Abstract Class for every piece
-    def move(self):
+    def move(self, dest1, dest2):
         pass
 
 
@@ -22,7 +22,7 @@ class Rook(Piece):
         self.name = 'Rook'
         self.colour = colour
 
-    def move(self):
+    def move(self, dest1, dest2):
         """Implementing the logic"""
 
 
@@ -31,7 +31,7 @@ class Knight(Piece):
         self.name = 'Knight'
         self.colour = colour
 
-    def move(self):
+    def move(self, dest1, dest2):
         """Implementing the logic"""
 
 
@@ -40,7 +40,7 @@ class Bishop(Piece):
         self.name = 'Bishop'
         self.colour = colour
 
-    def move(self):
+    def move(self, dest1, dest2):
         """Implementing the logic"""
 
 
@@ -49,7 +49,7 @@ class King(Piece):
         self.name = 'King'
         self.colour = colour
 
-    def move(self):
+    def move(self, dest1, dest2):
         """Implementing the logic"""
 
 
@@ -58,7 +58,7 @@ class Queen(Piece):
         self.name = 'Queen'
         self.colour = colour
 
-    def move(self):
+    def move(self, dest1, dest2):
         """Implementing the logic"""
 
 
@@ -67,17 +67,19 @@ class Pawn(Piece):
         self.name = 'Pawn'
         self.colour = colour
 
-    def move(self):
+    def move(self, dest1, dest2):
         """Implementing the logic"""
 
 
 class Blank(Piece):
     def __init__(self, colour):
-        self.name = 'Blank'
+        self.name = 'Empty'
         self.colour = colour
 
-    def move(self):
+    def move(self, dest1, dest2):
         """Implementing the logic"""
+        print "Invalid Position"
+        return
 
 
 class Board(object):
@@ -128,16 +130,54 @@ class Board(object):
                   [bk, bk, bk, bk, bk, bk, bk, bk],
                   [bk, bk, bk, bk, bk, bk, bk, bk],
                   [bk, bk, bk, bk, bk, bk, bk, bk],
-                  [r1, n1, b1, q1, k1, b2, n2, r2],
-                  [p1, p2, p3, p4, p5, p6, p7, p8]]
+                  [p1, p2, p3, p4, p5, p6, p7, p8],
+                  [r1, n1, b1, q1, k1, b2, n2, r2]]
+
+    def human_move(self, move, turn):
+        source1 = ord(move[0]) - 65
+        source2 = int(move[1])
+        dest1 = ord(move[2]) - 65
+        dest2 = int(move[3])
+        # print source1, source2
+        # print self.ChessBoard[source2 - 1][source1].colour + " " + turn
+        if self.ChessBoard[source2 - 1][source1].colour == turn:
+            self.ChessBoard[source2 - 1][source1].move(dest2, dest1)
+        else:
+            print "Invalid Color"
 
 
 class Game(object):
     turn = 'W'  # indicates the turn whether black or white
     b = Board()
-    count = 0   # number of steps made
+    count = 0  # number of steps made
     fifty_count = 0  # no of steps made without moving a pawn or killing
-    print b.ChessBoard[5][2].colour
+    # print "00 ", b.ChessBoard[0][0].colour
+
+    # ----------------- Printing Chess Board ----------------------#
+    print " ",
+    for x in range(65, 73):
+        print chr(x),
+    print ""
+    index = 0
+    for x in b.ChessBoard:
+        index += 1
+        print index,
+        for y in x:
+            print(y.name[0] + y.colour[0]),
+        print (8 - index + 1)
+    print " ",
+    for x in range(65, 73):
+        print chr(x),
+    print ""
+    # ----------------- Printing Chess Board ----------------------#
+
+    move = raw_input('Enter the move(Source-Destination):')
+    if len(move) != 4:
+        print "Wrong input(Source - Destination)"
+    else:
+        b.human_move(move, turn)
+
+        # print "00 ", b.ChessBoard[0][0].colour
 
 
 def main():
