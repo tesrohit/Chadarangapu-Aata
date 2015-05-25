@@ -133,10 +133,10 @@ class Board(object):
 
 
 class Game(object):
-    turn = 'W'
+    turn = 'W'  # indicates the turn whether black or white
     b = Board()
-    count = 0
-    fifty_count = 0
+    count = 0   # number of steps made
+    fifty_count = 0  # no of steps made without moving a pawn or killing
     print b.ChessBoard[5][2].colour
 
 
@@ -146,4 +146,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
