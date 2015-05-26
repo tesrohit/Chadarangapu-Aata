@@ -13,7 +13,7 @@ __author__ = 'TESR-PVPK'
 
 
 class Piece(object):  # Abstract Class for every piece
-    def move(self, dest1, dest2):
+    def move(self, source1, source2,  dest1, dest2):
         pass
 
 
@@ -22,7 +22,7 @@ class Rook(Piece):
         self.name = 'Rook'
         self.colour = colour
 
-    def move(self, dest1, dest2):
+    def move(self, source1, source2, dest1, dest2):
         """Implementing the logic"""
 
 
@@ -40,7 +40,7 @@ class Bishop(Piece):
         self.name = 'Bishop'
         self.colour = colour
 
-    def move(self, dest1, dest2):
+    def move(self, source1, source2, dest1, dest2):
         """Implementing the logic"""
 
 
@@ -49,7 +49,7 @@ class King(Piece):
         self.name = 'King'
         self.colour = colour
 
-    def move(self, dest1, dest2):
+    def move(self, source1, source2, dest1, dest2):
         """Implementing the logic"""
 
 
@@ -58,7 +58,7 @@ class Queen(Piece):
         self.name = 'Queen'
         self.colour = colour
 
-    def move(self, dest1, dest2):
+    def move(self, source1, source2, dest1, dest2):
         """Implementing the logic"""
 
 
@@ -67,7 +67,9 @@ class Pawn(Piece):
         self.name = 'Pawn'
         self.colour = colour
 
-    def move(self, dest1, dest2):
+    def move(self, source1, source2, dest1, dest2):
+        print str(source1) + " " + str(source2) + " " + str(dest1) + " " + str(dest2)
+
         """Implementing the logic"""
 
 
@@ -76,7 +78,7 @@ class Blank(Piece):
         self.name = 'Empty'
         self.colour = colour
 
-    def move(self, dest1, dest2):
+    def move(self, source1, source2, dest1, dest2):
         """Implementing the logic"""
         print "Invalid Position"
         return
@@ -135,15 +137,20 @@ class Board(object):
 
     def human_move(self, move, turn):
         source1 = ord(move[0]) - 65
-        source2 = int(move[1])
+        source2 = int(move[1]) - 1
         dest1 = ord(move[2]) - 65
-        dest2 = int(move[3])
-        # print source1, source2
-        # print self.ChessBoard[source2 - 1][source1].colour + " " + turn
-        if self.ChessBoard[source2 - 1][source1].colour == turn:
-            self.ChessBoard[source2 - 1][source1].move(dest2, dest1)
+        dest2 = int(move[3]) - 1
+
+        if turn == 'B':
+            source2 = 8 - source2 - 1
+            dest2 = 8 - dest2 - 1
+        # print source1, source2, dest1, dest2
+        # print self.ChessBoard[source2][source1].colour + " " + turn
+        if self.ChessBoard[source2][source1].colour == turn:
+            # print self.ChessBoard[source2][source1].name
+            self.ChessBoard[source2][source1].move(source2, source1, dest2, dest1)
         else:
-            print "Invalid Color"
+            print "Invalid Move"
 
 
 class Game(object):
