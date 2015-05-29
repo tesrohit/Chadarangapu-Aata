@@ -150,45 +150,64 @@ class Board(object):
             # print self.ChessBoard[source2][source1].name
             self.ChessBoard[source2][source1].move(source2, source1, dest2, dest1)
         else:
-            print "Invalid Move"
+            print "You can only move pieces of your color"
 
 
 class Game(object):
-    turn = 'W'  # indicates the turn whether black or white
+    turn = 'W'
+    gameEnded = False
+    count = 0                   # number of steps made
+    fiftyCount = 0              # no of steps made without moving a pawn or killing
+
     b = Board()
-    count = 0  # number of steps made
-    fifty_count = 0  # no of steps made without moving a pawn or killing
-    # print "00 ", b.ChessBoard[0][0].colour
 
+    def getMove(self, turn):
+        move = raw_input('Enter the move(Source-Destination Eg:"E2E4"):')
+        if len(move) != 4:
+            print "Wrong input(Source - Destination)"
+        else:
+            self.b.human_move(move, turn)
+
+    def playGame(self):
+        g = self
+        turn = g.turn
+
+    # These three steps should be fundamental for every move
+        g.getMove(turn)         # This function checks whose move it is and gets the move from human/computer
+        # g.updateBoard()       # This function contains validity checks
+        g.printBoard()          # This function prints the board as it is
+
+        if(g.turn is 'W'):
+            print "White's turn ended"
+            g.turn = 'B'
+        else:
+            print "Black's turn ended"
+            g.turn = 'W'
+            g.gameEnded = True   #Just stopping the game
+        return g
+
+    def printBoard(self):
+        print " ",
+        for x in range(65, 73):
+            print chr(x),
+        print ""
+        index = 0
+        for x in self.b.ChessBoard:
+            index += 1
+            print index,
+            for y in x:
+                print(y.name[0] + y.colour[0]),
+            print (8 - index + 1)
+        print " ",
+        for x in range(65, 73):
+            print chr(x),
+        print ""
     # ----------------- Printing Chess Board ----------------------#
-    print " ",
-    for x in range(65, 73):
-        print chr(x),
-    print ""
-    index = 0
-    for x in b.ChessBoard:
-        index += 1
-        print index,
-        for y in x:
-            print(y.name[0] + y.colour[0]),
-        print (8 - index + 1)
-    print " ",
-    for x in range(65, 73):
-        print chr(x),
-    print ""
-    # ----------------- Printing Chess Board ----------------------#
-
-    move = raw_input('Enter the move(Source-Destination):')
-    if len(move) != 4:
-        print "Wrong input(Source - Destination)"
-    else:
-        b.human_move(move, turn)
-
-        # print "00 ", b.ChessBoard[0][0].colour
-
 
 def main():
     g = Game()
+    while(not g.gameEnded):
+        g = g.playGame()
 
 
 if __name__ == '__main__':
