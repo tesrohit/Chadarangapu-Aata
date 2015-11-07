@@ -1,74 +1,91 @@
-import Boards
-
 __author__ = 'TESR'
+'''
+Main script which starts and maintains the game
+'''
 
-from Boards import Board
+import logging
+import chadarangapu_aata.commons as commons
+
+from chadarangapu_aata.model import Board
+from chadarangapu_aata.ui import print_board, get_user_move
+from chadarangapu_aata.engine import check_valid_move
+
+_logger = logging.getLogger()
 
 class Game(object):
-    turn = 'W'
-    gameEnded = False
-    count = 0                   # number of steps made
-    fiftyCount = 0              # no of steps made without moving a pawn or killing
+    def __init__(self, player_white="TestWhite", player_black="TestBlack"):
 
-    b = Board.Board()
+        """
 
-    def getMove(self, turn):
-        move = raw_input('Enter the move(Source-Destination Eg:"E2E4"):')
-        if len(move) != 4:   #String should be size of 4 characters
-            print "Wrong input(SourcePosition - DestinationPosition)"
-            main()
 
-        if ((ord(move[0]) not in range(ord('A'),ord('G')+1)) and (ord(move[2]) not in range(ord('A'),ord('G')+1))): #Checking the alphabets are given in range of [A,G]
-            print "Give correct characters which indicate positions"
-            main()
+        :rtype : object
+        :type player_white: str
+        :type player_black: str
+        """
+        _logger.debug("Initializing game object")
+        self.players = dict()
+        self.players["W"] = player_white
+        self.players["B"] = player_black
+        self.board = Board()
 
-        if ((int(move[1]) not in range(0,9)) and (int(move[3]) not in range(0,9))): #Checking the numbers given in the range of [1,8]
-            print "Give correct numbers which indicate positions"
-            main()
-        else:
-            self.b.human_move(move, turn)
+        # Initiating all other game parameters
+        if not (player_black == "CPU" or player_white == "CPU"):    # Tokkalo logic
+            self.type = "2player"
 
-    def playGame(self):
-        g = self
-        turn = g.turn
+        self.turn = 'W'
+        self.game_ended = False
+        self.fifty_count = False  # no of steps made without moving a pawn or killing
 
-        # These three steps should be fundamental for every move
-        g.getMove(turn)         # This function checks whose move it is and gets the move from human/computer
-        #g.updateBoard()       # This function contains validity checks
-        g.printBoard()          # This function prints the board as it is
+        _logger.debug("Initialized game object: %s" %(locals()))
 
-        if(g.turn is 'W'):
-            print "White's turn ended"
-            g.turn = 'B'
-        else:
-            print "Black's turn ended"
-            g.turn = 'W'
-            #g.gameEnded = True   #Just stopping the game
-        return g
+def two_player_game(curr_game):
 
-    def printBoard(self):
-        print "  ",
-        for x in range(65, 73):
-            print chr(x) + " ",
-        print ""
-        index = 0
-        for x in self.b.ChessBoard:
-            index += 1
-            print index,
-            for y in x:
-                print(y.name[0] + y.colour[0]),
-            print (8 - index + 1)
-        print "  ",
-        for x in range(65, 73):
-            print chr(x) + " ",
-        print ""
-    # ----------------- Printing Chess Board ----------------------#
+    while not curr_game.game_ended:
+        # Try to get user_input from the user regarding the move.
+        # The below function only performs basic checks regarding the move
+        if curr_game.turn == "W":
+            _logger.info("White's turn:")
+        elif curr_game.turn == "B":
+            _logger.info("Black's turn:")
+
+        move = get_user_move()
+
+        if move:
+            # If the move is specified, check for its validity
+
+            if check_valid_move(move, curr_game.turn, curr_game.board):
+                _logger.debug("the move: %s is valid" %(move))
+
+                # Updating the game's board object with new changes
+                # BOARD.PY NAKU NACHALE
+                #curr_game.board.update_board()
+
+                # Toggling turn for white and black
+                curr_game.turn = "B" if curr_game.turn == "W" else "W"
+
+                # Calling the UI to display updated board
+                print_board(curr_game.board)
+
+            else:
+                _logger.info("Invalid move!")
+                _logger.debug("Continue asking for same move")
+                continue
 
 def main():
-    g = Game()
-    g.printBoard()
-    while(not g.gameEnded):
-        g = g.playGame()
+
+    # Configuring logging at info level... set environment variable to override "set AATA_LOG_LEVEL=DEBUG"
+    commons.configure_logging(_logger)
+
+    # You can include the logic for asking the player names here.. ignoring for now
+    curr_game = Game()
+
+    _logger.info("Initial board...")
+    print_board(curr_game.board)
+
+    if curr_game.type == "2player":
+        _logger.info("Starting a two player game")
+        two_player_game(curr_game)
+
 
 
 if __name__ == '__main__':

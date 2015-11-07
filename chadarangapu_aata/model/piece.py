@@ -1,10 +1,18 @@
 __author__ = 'TESR'
+'''
+Each piece can be placed in seperate class!
+'''
 
-class Piece(object):  # Abstract Class for every piece
-    def move(self, source1, source2,  dest1, dest2):
+import logging
+_logger = logging.getLogger(__name__)
+
+
+class _Piece(object):  # Abstract Class for every piece
+
+    def move(self, source1, source2, dest1, dest2):
         pass
 
-class Rook(Piece):
+class Rook(_Piece):
     def __init__(self, colour):
         self.name = 'Rook'
         self.colour = colour
@@ -13,16 +21,16 @@ class Rook(Piece):
         """Implementing the logic"""
 
 
-class Knight(Piece):
+class Knight(_Piece):
     def __init__(self, colour):
         self.name = 'Knight'
         self.colour = colour
 
-    def move(self, dest1, dest2):
+    def move(self, source1, source2, dest1, dest2):
         """Implementing the logic"""
 
 
-class Bishop(Piece):
+class Bishop(_Piece):
     def __init__(self, colour):
         self.name = 'Bishop'
         self.colour = colour
@@ -31,7 +39,7 @@ class Bishop(Piece):
         """Implementing the logic"""
 
 
-class King(Piece):
+class King(_Piece):
     def __init__(self, colour):
         self.name = 'King'
         self.colour = colour
@@ -40,7 +48,7 @@ class King(Piece):
         """Implementing the logic"""
 
 
-class Queen(Piece):
+class Queen(_Piece):
     def __init__(self, colour):
         self.name = 'Queen'
         self.colour = colour
@@ -49,7 +57,7 @@ class Queen(Piece):
         """Implementing the logic"""
 
 
-class Pawn(Piece):
+class Pawn(_Piece):
     def __init__(self, colour):
         self.name = 'Pawn'
         self.colour = colour
@@ -71,14 +79,13 @@ class Pawn(Piece):
         if source2 == dest2:
             horizontal = True
 
-        if (horizontal and vertical):
+        if horizontal and vertical:
             result = True
             return result
         return result
-        """Implementing the logic"""
 
 
-class Blank(Piece):
+class Blank(_Piece):
     def __init__(self, colour):
         self.name = 'Empty'
         self.colour = colour
