@@ -21,4 +21,9 @@ def get_user_move():
             print "Give correct numbers which indicate positions"
             return None
 
+
+        source_square = (int(move[1]), ord(move[0])-64)
+        dest_square = (int(move[3]), ord(move[2])-64)
+        move = source_square + dest_square
+        _logger.info("Translated move: %s" %str(move))
         return move

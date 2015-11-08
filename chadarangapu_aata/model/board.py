@@ -1,100 +1,118 @@
 __author__ = 'TESR'
 
-'''
-NAKU NACHALE:
-
-1) class variables anni __init__ lo undali per instance
-
-2)
-
-3) ipudu kotta piece vachindi anuko.. lekapote piece chachipote ela?
-
-   Ivi naku anipichina changes prastutaniki
-     -- piece initial_position piece.py lo undali
-     -- pieces declaration game lo undali (since pieces are for a game.. pawn queening, piece death etc..)
-     -- board lo place_piece()/remove_piece() ani functions rasi pieces pettali/teeseyali (update_board lo kuda use avtundi)
-'''
-
-
 from piece import *
 
 import logging
 _logger = logging.getLogger(__name__)
 
 class Board(object):
-    _logger.debug("Initializing board")
-    R1 = Rook('W')
-    R2 = Rook('W')
-    r1 = Rook('B')
-    r2 = Rook('B')
 
-    N1 = Knight('W')
-    N2 = Knight('W')
-    n1 = Knight('B')
-    n2 = Knight('B')
+    def __init__(self):
+        '''
+        Material            :   A list of all piece objects on the board
+        Piece_Dictionary    :   Every piece on the board has an entry in this dictionary (Eg: {"11" : Rook_obj} for a Rook at (1,1)
+        '''
+        _logger.debug("Initializing board")
+        self.material = []
+        self.piece_dictionary = dict()
+        self.initialize_board()
 
-    B1 = Bishop('W')
-    B2 = Bishop('W')
-    b1 = Bishop('B')
-    b2 = Bishop('B')
+    def place_piece(self, piece_obj):
+        '''
+        Append the newly placed piece to the material list of the board
+        Create an entry for the newly placed piece in the piece dictionary
+        '''
+        self.material.append(piece_obj)
+        piece_key = str(piece_obj.x) + str(piece_obj.y)
+        self.piece_dictionary[piece_key] = piece_obj
+        _logger.debug("Placed piece: %s"%(piece_obj.name))
 
-    K1 = King('W')
-    k1 = King('B')
+    def remove_piece(self, source_x, source_y):
+        '''
+        Removing the piece from the board's material list
+        Removing the key in the piece_dictionary
+        '''
+        piece_identifier = str(source_x)+str(source_y)
+        removed_piece = self.piece_dictionary[piece_identifier]
+        # Removed piece from material list
+        self.material.remove(removed_piece)
+        # Updating piece_dictionary
+        del self.piece_dictionary[piece_identifier]
 
-    Q1 = Queen('W')
-    q1 = Queen('B')
+        _logger.debug("Removed piece:%s from the square: %s,%s and returning the piece object" %(removed_piece.name,source_x, source_y))
+        return removed_piece
 
-    P1 = Pawn('W')
-    P2 = Pawn('W')
-    P3 = Pawn('W')
-    P4 = Pawn('W')
-    P5 = Pawn('W')
-    P6 = Pawn('W')
-    P7 = Pawn('W')
-    P8 = Pawn('W')
+    def initialize_board(self):
+        '''
+        This method declares the initial material/ pieces to be placed on the board
+        Then it adds all the material to the board's material list by calling place_piece() function
+        '''
+        initial_material = [
+            Rook('W',1,1), Rook('W',1,8),
+            Rook('B',8,1), Rook('B',8,8),
 
-    p1 = Pawn('B')
-    p2 = Pawn('B')
-    p3 = Pawn('B')
-    p4 = Pawn('B')
-    p5 = Pawn('B')
-    p6 = Pawn('B')
-    p7 = Pawn('B')
-    p8 = Pawn('B')
+            Knight('W',1,2), Knight('W',1,7),
+            Knight('B',8,2), Knight('B',8,7),
 
-    bk = Blank('Z')
+            Bishop('W',1,3), Bishop('W',1,6),
+            Bishop('B',8,3), Bishop('B',8,6),
 
-    ChessBoard = [[R1, N1, B1, Q1, K1, B2, N2, R2],
-                  [P1, P2, P3, P4, P5, P6, P7, P8],
-                  [bk, bk, bk, bk, bk, bk, bk, bk],
-                  [bk, bk, bk, bk, bk, bk, bk, bk],
-                  [bk, bk, bk, bk, bk, bk, bk, bk],
-                  [bk, bk, bk, bk, bk, bk, bk, bk],
-                  [p1, p2, p3, p4, p5, p6, p7, p8],
-                  [r1, n1, b1, q1, k1, b2, n2, r2]]
+            King('W',1,5), King('B',8,5),
+            Queen('W',1,4), Queen('B',8,4),
+
+            Pawn('W',2,1), Pawn('W',2,2), Pawn('W',2,3), Pawn('W',2,4), Pawn('W',2,5), Pawn('W',2,6), Pawn('W',2,7), Pawn('W',2,8),
+            Pawn('B',7,1), Pawn('B',7,2), Pawn('B',7,3), Pawn('B',7,4), Pawn('B',7,5), Pawn('B',7,6), Pawn('B',7,7), Pawn('B',7,8)
+        ]
+        _logger.debug("Populating the initial board with pieces")
+
+        for piece_obj in initial_material:
+            self.place_piece(piece_obj)
+
 
     def update_board(self, source1, source2, dest1, dest2):
-        temp_pawn = Blank('Z')
-        temp_pawn = self.ChessBoard[source1][source2]
-        self.ChessBoard[source1][source2] = self.ChessBoard[dest1][dest2]
-        self.ChessBoard[dest1][dest2] = temp_pawn
-        return
+        '''
+        When a move of format (source_x,source_y, dest_x, dest_y) is given to this function, it does the following
+        1) removes the piece from (source_x, source_y)
+        2) place the removed piece in (dest_x, dest_y)
+        '''
+        piece_obj = self.remove_piece(source1, source2)
+        piece_obj.x, piece_obj.y = dest1, dest2
+        self.place_piece(piece_obj)
 
-    def human_move(self, move, turn):
-        source2 = ord(move[0]) - 65
-        source1 = int(move[1]) - 1
-        dest2 = ord(move[2]) - 65
-        dest1 = int(move[3]) - 1
+        _logger.info("Updated the board")
 
-        if turn == 'B':
-            source1 = 8 - source1 - 1
-            dest1 = 8 - dest1 - 1
-        # print source1, source2, dest1, dest2
-        # print self.ChessBoard[source2][source1].colour + " " + turn
-        if self.ChessBoard[source1][source2].colour == turn:
-            # print self.ChessBoard[source2][source1].name
-            if (self.ChessBoard[source1][source2].move(source1, source2, dest1, dest2)):
-                self.update_board(source1, source2, dest1, dest2)  # Update board
-                return
-        else:
-            print "You can only move pieces of your color"
+
+    def __str__(self):
+        '''
+        This function is the string representation the chess board. can be called using python print function
+        '''
+
+        WHITE = '\033[89m'
+        BLACK = '\033[91m'
+        ENDC = '\033[0m'
+
+        chess_board_footer = '''\
+***********************
+  - A B C D E F G H -
+'''
+        chess_board_str = ""
+
+        # Scanning from (1,1) to (8,8) searching for pieces in piece_dictionary
+        for i in range(8,0, -1):
+            chess_board_str+= "%s |" %(i)
+            for y in range(1,9):
+                current_sqr_identifier = str(i)+str(y)
+                piece = self.piece_dictionary.get(current_sqr_identifier)
+                if piece:
+                    if piece.colour == "W":
+                        chess_board_str += " "+WHITE+piece.representation+ENDC
+
+                    elif piece.colour == "B":
+                        chess_board_str += " "+BLACK+piece.representation+ENDC
+                else:
+                    chess_board_str+= "  "
+            chess_board_str+="\n"
+
+        chess_board_str = chess_board_str + chess_board_footer
+
+        return chess_board_str
