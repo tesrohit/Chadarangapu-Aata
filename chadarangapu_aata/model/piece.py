@@ -1,58 +1,85 @@
 __author__ = 'TESR'
+'''
+Each piece can be placed in seperate class!
+'''
 
-class Piece(object):  # Abstract Class for every piece
-    def move(self, source1, source2,  dest1, dest2):
-        pass
+import logging
+_logger = logging.getLogger(__name__)
 
-class Rook(Piece):
-    def __init__(self, colour):
+class Rook():
+    def __init__(self, colour, x = None, y = None):
         self.name = 'Rook'
+        self.representation = "R"
         self.colour = colour
+        self.x = x
+        self.y = y
 
     def move(self, source1, source2, dest1, dest2):
         """Implementing the logic"""
 
-
-class Knight(Piece):
-    def __init__(self, colour):
+class Knight():
+    def __init__(self, colour, x = None, y = None):
         self.name = 'Knight'
+        self.representation = "N"
         self.colour = colour
+        self.x = x
+        self.y = y
 
-    def move(self, dest1, dest2):
+    def move(self, source1, source2, dest1, dest2):
         """Implementing the logic"""
 
+    
+        
 
-class Bishop(Piece):
-    def __init__(self, colour):
+class Bishop():
+    def __init__(self, colour, x = None, y = None):
         self.name = 'Bishop'
+        self.representation = "B"
         self.colour = colour
+        self.x = x
+        self.y = y
 
     def move(self, source1, source2, dest1, dest2):
         """Implementing the logic"""
 
+    
+        
 
-class King(Piece):
-    def __init__(self, colour):
+class King():
+    def __init__(self, colour, x = None, y = None):
         self.name = 'King'
+        self.representation = "K"
         self.colour = colour
+        self.x = x
+        self.y = y
 
     def move(self, source1, source2, dest1, dest2):
         """Implementing the logic"""
 
+    
+        
 
-class Queen(Piece):
-    def __init__(self, colour):
+class Queen():
+    def __init__(self, colour, x = None, y = None):
         self.name = 'Queen'
+        self.representation = "Q"
         self.colour = colour
+        self.x = x
+        self.y = y
 
     def move(self, source1, source2, dest1, dest2):
         """Implementing the logic"""
 
+    
+        
 
-class Pawn(Piece):
-    def __init__(self, colour):
+class Pawn():
+    def __init__(self, colour, x = None, y = None):
         self.name = 'Pawn'
+        self.representation = "P"
         self.colour = colour
+        self.x = x
+        self.y = y
 
     def move(self, source1, source2, dest1, dest2):
         result = False
@@ -71,19 +98,26 @@ class Pawn(Piece):
         if source2 == dest2:
             horizontal = True
 
-        if (horizontal and vertical):
+        if horizontal and vertical:
             result = True
             return result
         return result
-        """Implementing the logic"""
 
+    
+        
 
-class Blank(Piece):
-    def __init__(self, colour):
+class Blank():
+    def __init__(self, colour, x = None, y = None):
         self.name = 'Empty'
+        self.representation = " "
         self.colour = colour
+        self.x = x
+        self.y = y
 
     def move(self, source1, source2, dest1, dest2):
         """Implementing the logic"""
         print "Invalid Position"
         return
+
+    
+        

@@ -1,2 +1,5 @@
 # Chadarangapu-Aata
-As of now nothing to write
+A simple chess suite... currently under development
+
+
+Main script to run the game: game.py
