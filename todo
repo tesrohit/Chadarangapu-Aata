@@ -1,0 +1,11 @@
+Phase 1:
+Convert all the code to python 3.x
+Add the "move definitions" for Rook, Knight, Bishop, Queen, King
+Complete the validitychecker function including the CHECK
+Include castling
+Option to add a piece when pawn reaches other side
+Add the test files
+
+Phase 2:
+Add the UI
+Complete the computer generated moves function
