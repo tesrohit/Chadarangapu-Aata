@@ -37,7 +37,7 @@ const Square = (props) => {
 const Row = (props) => {
   let squares = [];
 
-  for(let col=0;col<8;col++){
+  for(let col=1;col<=8;col++){
     let isSourceSquare = (
       props.sourceSquare.x === props.row && 
       props.sourceSquare.y === col
@@ -64,11 +64,11 @@ const Row = (props) => {
 
 class ChessBoard extends React.Component{
   componentDidUpdate() {
-    if(this.props.currentMoveInfo.x1 && this.props.currentMoveInfo.y1 
-      && this.props.currentMoveInfo.x2 && this.props.currentMoveInfo.y2){
+    if(this.props.currentMoveInfo.x1 && this.props.currentMoveInfo.y1
+      && this.props.currentMoveInfo.x2  && this.props.currentMoveInfo.y2){
       this.props.makeMove(
         this.props.currentMoveInfo.x1,
-        this.props.currentMoveInfo.y1 ,
+        this.props.currentMoveInfo.y1,
         this.props.currentMoveInfo.x2, 
         this.props.currentMoveInfo.y2);
     }
@@ -76,10 +76,15 @@ class ChessBoard extends React.Component{
 
   renderMoveHistory() {
     let renderedHistory = [];
-    for(let index in this.props.moveHistory) {
+    for(let index=0; index<this.props.moveHistory.length; index+=1) {
         let element = this.props.moveHistory[index];
         renderedHistory.push(
-          <div key={index}>({element.x1}, {element.y1}) => ({element.x2}, {element.y2})</div>
+          <div key={index}>
+            <strong> {index+1}. </strong> 
+            {String.fromCharCode('a'.charCodeAt(0)+ element.y1 -1)}{element.x1} 
+            => 
+            {String.fromCharCode('a'.charCodeAt(0)+ element.y2 -1)}{element.x2}
+          </div>
         )
     }
     return <div> {renderedHistory} </div>;
@@ -88,7 +93,7 @@ class ChessBoard extends React.Component{
   render() {
     let rows = [];
 
-    for(let row=7;row>=0;row--){
+    for(let row=8;row>=1;row--){
       rows.push(
         <Row 
           key={row} 
@@ -148,6 +153,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     squareClicked: (x, y) => {
+      console.log("Square clicked: ",x, y);
       dispatch({
         type: boardActions.SELECT_SQUARE,
         payload: {
