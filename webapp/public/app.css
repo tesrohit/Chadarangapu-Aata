@@ -36,6 +36,11 @@ html, body
   line-height:30px;
 }
 
+.overflowingBox {
+  overflow: auto;
+  height: 400px;
+}
+
 .square{
   font-weight: bold;
   font-size: 1.5em;

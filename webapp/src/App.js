@@ -76,18 +76,17 @@ class ChessBoard extends React.Component{
 
   renderMoveHistory() {
     let renderedHistory = [];
-    for(let index=0; index<this.props.moveHistory.length; index+=1) {
+    for(let index=this.props.moveHistory.length-1; index>=0; index-=1) {
         let element = this.props.moveHistory[index];
         renderedHistory.push(
-          <div key={index}>
-            <strong> {index+1}. </strong> 
+          <li key={index}>
             {String.fromCharCode('a'.charCodeAt(0)+ element.y1 -1)}{element.x1} 
             => 
             {String.fromCharCode('a'.charCodeAt(0)+ element.y2 -1)}{element.x2}
-          </div>
+          </li>
         )
     }
-    return <div> {renderedHistory} </div>;
+    return <ol reversed> {renderedHistory} </ol>;
   }
 
   render() {
@@ -133,8 +132,8 @@ class ChessBoard extends React.Component{
         <div className="unimplemented"> Timer </div>
         <div> 
           <h4> Move history</h4>
-          <hr/>
-          {this.renderMoveHistory()}
+          <hr />
+          <div className="overflowingBox">{this.renderMoveHistory()}</div>
         </div>
       </div>
   </div>
