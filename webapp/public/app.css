@@ -1,0 +1,141 @@
+html, body
+{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.column {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: column;
+  justify-content: space-around;
+ 
+  line-height:30px;
+}
+
+.row {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row;
+  justify-content: space-around;
+ 
+  line-height:30px;
+}
+
+.square{
+  font-weight: bold;
+  font-size: 1.5em;
+  text-align: center;
+  flex: 1 0 auto;
+  height:auto;
+  border: 1px solid black;
+}
+
+.square:before {
+  content:'';
+  float:left;
+  padding-top:100%;
+}
+
+.unimplemented {
+  background-color: #ddd;
+  font-style: italic;
+}
+
+.unimplemented::after {
+  content: "(unimplemented)"
+}
+
+.boardDisplay .row:nth-child(even) .square:nth-child(even), .row:nth-child(odd) .square:nth-child(odd){
+  background-color: #fff;
+}
+
+.boardDisplay .row:nth-child(odd) .square:nth-child(even), .row:nth-child(even) .square:nth-child(odd){
+  background-color: #aaa;
+}
+
+.square:hover{
+  border: 1px solid orange;
+}
+
+.validSquare {
+  background-color: green;
+  background: radial-gradient(greenyellow,lightgreen, white);
+}
+
+.attackSquare {
+  background-color: red;
+  background: radial-gradient(red, orange, white);
+}
+
+.selectedSquare {
+  border: 2px solid #2F2FCF;
+  background-color: blue;
+  background: radial-gradient(blue, lightblue, white);
+}
+
+.emptySquare::after {
+  content : url("./images/empty_square.png");
+}
+
+.whiteKing::after {
+  content : url("./images/white_king.png");
+}
+
+.whiteQueen::after {
+  content : url("./images/white_queen.png");
+}
+
+.whiteBishop::after {
+  content : url("./images/white_bishop.png");
+}
+
+.whiteKnight::after {
+  content : url("./images/white_knight.png");
+}
+
+.whiteRook::after {
+  content : url("./images/white_rook.png");
+}
+
+.whitePawn::after {
+  content : url("./images/white_pawn.png");
+}
+
+.blackKing::after {
+  content : url("./images/black_king.png");
+}
+
+.blackQueen::after {
+  content : url("./images/black_queen.png");
+}
+
+.blackBishop::after {
+  content : url("./images/black_bishop.png");
+}
+
+.blackKnight::after {
+  content : url("./images/black_knight.png");
+}
+
+.blackRook::after {
+  content : url("./images/black_rook.png");
+}
+
+.blackPawn::after {
+  content : url("./images/black_pawn.png");
+}
